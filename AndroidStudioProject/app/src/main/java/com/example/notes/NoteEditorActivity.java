@@ -14,6 +14,8 @@ public class NoteEditorActivity extends AppCompatActivity {
 
     private RichEditor mEditor;
 
+    int noteId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,10 +34,16 @@ public class NoteEditorActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        int noteId = intent.getIntExtra("noteId", -1);
+        noteId = intent.getIntExtra("noteId", -1);
 
         if(noteId != -1){
             mEditor.setHtml(MainActivity.notes.get(noteId));
+        }
+        else {
+
+            MainActivity.notes.add("");
+            noteId = MainActivity.notes.size() - 1;
+            MainActivity.arrayAdapter.notifyDataSetChanged();
         }
 
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
