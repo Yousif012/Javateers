@@ -1,85 +1,257 @@
 package com.example.notes;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.format.DateFormat;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
+import java.nio.CharBuffer;
+import java.util.Scanner;
+
+import jp.wasabeef.richeditor.RichEditor;
 
 public class NoteEditorActivity extends AppCompatActivity {
-    int noteId;
+
+    private RichEditor mEditor;
+
+    //int noteId;
+    File note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
+        mEditor = (RichEditor) findViewById(R.id.editor);
+        mEditor.setEditorHeight(200);
+        mEditor.setEditorFontSize(22);
+        mEditor.setEditorFontColor(Color.BLACK);
+        //mEditor.setEditorBackgroundColor(Color.BLUE);
+        //mEditor.setBackgroundColor(Color.BLUE);
+        //mEditor.setBackgroundResource(R.drawable.bg);
+        //mEditor.setPadding(10, 10, 10, 10);
+        //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
+        //mEditor.setPlaceholder("Insert text here...");
+        //mEditor.setInputEnabled(false);
 
-        EditText editText = findViewById(R.id.editText);
 
-        // Fetch data that is passed from MainActivity
+
+        // grab note from MainActivity
         Intent intent = getIntent();
+        note = (File) intent.getSerializableExtra("note");
 
-        // Accessing the data using key and value
-        noteId = intent.getIntExtra("noteId", -1);
-        if (noteId != -1) {
-            editText.setText(MainActivity.notes.get(noteId));
-        } else {
+        // read contents of note and put it in the editor
+        try {
+            Scanner scan = new Scanner(note);
+            String storage = "";
+
+            while(scan.hasNext()) {
+                storage = storage + scan.nextLine();
+            }
+
+            mEditor.setHtml(storage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        /*
+        if(note != -1){
+            mEditor.setHtml(MainActivity.notes.get(noteId));
+        }
+        else {
 
             MainActivity.notes.add("");
             noteId = MainActivity.notes.size() - 1;
             MainActivity.arrayAdapter.notifyDataSetChanged();
-
         }
-
-        editText.addTextChangedListener(new TextWatcher() {
+        */
+        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // add your code here
-            }
+            public void onTextChange(String text) { // autosave feature
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                MainActivity.notes.set(noteId, String.valueOf(charSequence));
-                MainActivity.arrayAdapter.notifyDataSetChanged();
-                // Creating Object of SharedPreferences to store data in the phone
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.example.notes", Context.MODE_PRIVATE);
-                HashSet<String> set = new HashSet(MainActivity.notes);
-                sharedPreferences.edit().putStringSet("notes", set).apply();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // add your code here
+                //MainActivity.notes.set(noteId, text);
+                //MainActivity.arrayAdapter.notifyDataSetChanged();
                 try {
-                    String h = DateFormat.format("MM-dd-yyyyy-h-mmssaa", System.currentTimeMillis()).toString();
-                    // this will create a new name everytime and unique
-                    File root = new File(Environment.getExternalStorageDirectory(), "Notes");
-                    // if external memory exists and folder with name Notes
-                    if (!root.exists()) {
-                        root.mkdir(); // this will create folder.
-                    }
-                    File filepath = new File(root, h + ".txt"); // file path to save
-                    FileWriter writer = new FileWriter(filepath);
-                    writer.append(editText.getText().toString());
+                    FileWriter writer = new FileWriter(note);
+
+                    writer.write(text);
                     writer.flush();
                     writer.close();
-                    String m = "File generated with name " + h + ".txt";
 
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    editText.setText(e.getMessage().toString());
+                    throw new RuntimeException(e);
                 }
+            }
+        });
+
+        findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.undo();
+            }
+        });
+
+        findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.redo();
+            }
+        });
+
+        findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setBold();
+            }
+        });
+
+        findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setItalic();
+            }
+        });
+
+        findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setSubscript();
+            }
+        });
+
+        findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setSuperscript();
+            }
+        });
+
+        findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setStrikeThrough();
+            }
+        });
+
+        findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setUnderline();
+            }
+        });
+
+        findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setHeading(1);
+            }
+        });
+
+        findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setHeading(2);
+            }
+        });
+
+        findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setHeading(3);
+            }
+        });
+
+        findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setHeading(4);
+            }
+        });
+
+        findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setHeading(5);
+            }
+        });
+
+        findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setHeading(6);
+            }
+        });
+
+        findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
+            private boolean isChanged;
+
+            @Override
+            public void onClick(View v) {
+                mEditor.setTextColor(isChanged ? Color.BLACK : Color.RED);
+                isChanged = !isChanged;
+            }
+        });
+
+        findViewById(R.id.action_bg_color).setOnClickListener(new View.OnClickListener() {
+            private boolean isChanged;
+
+            @Override
+            public void onClick(View v) {
+                mEditor.setTextBackgroundColor(isChanged ? Color.TRANSPARENT : Color.YELLOW);
+                isChanged = !isChanged;
+            }
+        });
+
+        findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setIndent();
+            }
+        });
+
+        findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setOutdent();
+            }
+        });
+
+        findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setAlignLeft();
+            }
+        });
+
+        findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setAlignCenter();
+            }
+        });
+
+        findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setAlignRight();
+            }
+        });
+
+
+        findViewById(R.id.action_insert_bullets).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditor.setBullets();
             }
         });
     }
