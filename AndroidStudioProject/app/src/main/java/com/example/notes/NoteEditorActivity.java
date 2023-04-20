@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,6 +22,7 @@ import jp.wasabeef.richeditor.RichEditor;
 public class NoteEditorActivity extends AppCompatActivity {
 
     private RichEditor mEditor;
+
 
     //int noteId;
     File note;
@@ -66,6 +68,7 @@ public class NoteEditorActivity extends AppCompatActivity {
 
         /*
         if(note != -1){
+
             mEditor.setHtml(MainActivity.notes.get(noteId));
         }
         else {

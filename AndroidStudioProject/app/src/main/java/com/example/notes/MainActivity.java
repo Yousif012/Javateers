@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import jp.wasabeef.richeditor.RichEditor;
 
 public class MainActivity extends AppCompatActivity {
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("No", null)
                     .show();
 
+
             return true;
         }
 
@@ -133,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         String title = "Placeholder";
         File note = new File(getApplicationContext().getFilesDir(), title);
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         filelist = getApplicationContext().getFilesDir().listFiles();
         values = new ArrayList<File>(Arrays.asList(filelist));
         arrayAdapter = new ArrayAdapter<File>(this, android.R.layout.simple_list_item_1, values);
+
 
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(arrayAdapter);
@@ -202,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                         .show();
 
                 return true;
+
             }
         });
 
