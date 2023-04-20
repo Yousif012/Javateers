@@ -1,16 +1,22 @@
 package com.example.notes;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -52,9 +58,70 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.add_note){
 
-            Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
+            //Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
 
-            startActivity(intent);
+            //startActivity(intent);
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Create Note")
+                    .setMessage("Are you sure you want to create a new note?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            /*
+                            Dialog dialog = new Dialog(getApplicationContext(), android.R.style.Theme_Dialog);
+                            Window window = dialog.getWindow();
+                            window.setLayout(500, 50);
+                            dialog.setCancelable(true);
+                            dialog.setCanceledOnTouchOutside(true);
+                            dialog.setContentView(R.layout.create_note_dialog);
+
+                             */
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+                            View view = inflater.inflate(R.layout.create_note_dialog, null);
+                            final EditText title = (EditText)view.findViewById(R.id.title); // setup to grab user input
+                            builder.setView(view)
+                                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            String input = title.getText().toString(); // grab new file name
+
+                                            File note = new File(getApplicationContext().getFilesDir(), input);
+
+                                            try {// create storage file
+                                                note.createNewFile();
+                                            } catch (IOException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                            try { // initialize file
+                                                FileWriter writer = new FileWriter(note);
+                                                writer.write("Input text here:");
+                                                writer.flush();
+                                                writer.close();
+                                            } catch (IOException e) {
+                                                throw new RuntimeException(e);
+                                            }
+
+                                            filelist = getApplicationContext().getFilesDir().listFiles();
+
+                                            arrayAdapter.clear(); // update menu in app
+                                            for (File file : filelist) {
+                                                arrayAdapter.add(file);
+
+                                            }
+                                            arrayAdapter.notifyDataSetChanged();
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .show();
+
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
 
             return true;
         }
@@ -121,10 +188,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //File[] notes = getFilesDir().listFiles();
-                                for (File noteToDelete : filelist) {
-                                    noteToDelete.delete(); // delete file from device
-                                    filelist = getApplicationContext().getFilesDir().listFiles();
-                                }
+                                noteToDelete.delete(); // delete file from device
+                                filelist = getApplicationContext().getFilesDir().listFiles();
 
                                 arrayAdapter.clear(); // update menu in app
                                 for (File file : filelist) {
