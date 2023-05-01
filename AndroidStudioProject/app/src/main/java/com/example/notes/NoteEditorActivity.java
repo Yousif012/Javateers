@@ -8,13 +8,24 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.CharBuffer;
+import java.util.Scanner;
+
 import jp.wasabeef.richeditor.RichEditor;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
     private RichEditor mEditor;
 
-    int noteId;
+
+    //int noteId;
+    File note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +38,37 @@ public class NoteEditorActivity extends AppCompatActivity {
         //mEditor.setEditorBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundResource(R.drawable.bg);
-        mEditor.setPadding(10, 10, 10, 10);
+        //mEditor.setPadding(10, 10, 10, 10);
         //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("Insert text here...");
+        //mEditor.setPlaceholder("Insert text here...");
         //mEditor.setInputEnabled(false);
 
 
-        Intent intent = getIntent();
-        noteId = intent.getIntExtra("noteId", -1);
 
-        if(noteId != -1){
+        // grab note from MainActivity
+        Intent intent = getIntent();
+        note = (File) intent.getSerializableExtra("note");
+
+        // read contents of note and put it in the editor
+        try {
+            Scanner scan = new Scanner(note);
+            String storage = "";
+
+            while(scan.hasNext()) {
+                storage = storage + scan.nextLine();
+            }
+
+            mEditor.setHtml(storage);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        /*
+        if(note != -1){
+
             mEditor.setHtml(MainActivity.notes.get(noteId));
         }
         else {
@@ -45,13 +77,23 @@ public class NoteEditorActivity extends AppCompatActivity {
             noteId = MainActivity.notes.size() - 1;
             MainActivity.arrayAdapter.notifyDataSetChanged();
         }
-
+        */
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
-            public void onTextChange(String text) {
+            public void onTextChange(String text) { // autosave feature
 
-                MainActivity.notes.set(noteId, text);
-                MainActivity.arrayAdapter.notifyDataSetChanged();
+                //MainActivity.notes.set(noteId, text);
+                //MainActivity.arrayAdapter.notifyDataSetChanged();
+                try {
+                    FileWriter writer = new FileWriter(note);
+
+                    writer.write(text);
+                    writer.flush();
+                    writer.close();
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
