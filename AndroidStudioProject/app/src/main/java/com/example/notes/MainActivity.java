@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     static ArrayList<String> notes = new ArrayList<>();
-    static ArrayAdapter arrayAdapter;
+    static ArrayAdapter<String> arrayAdapter;
     static String[] filelist;
     static List<String> values;
 
@@ -157,7 +157,8 @@ public class MainActivity extends AppCompatActivity {
         // weird work around, have to do it this way otherwise the arrayadapter won't update
         filelist = getApplicationContext().getFilesDir().list();
         values = new ArrayList<String>(Arrays.asList(filelist));
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, values);
+
+        arrayAdapter = new com.example.notes.List(this, filelist);
 
 
         ListView listView = (ListView) findViewById(R.id.listView);
