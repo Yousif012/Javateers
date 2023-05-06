@@ -14,13 +14,14 @@ Implemented features:
 text editing
 text formatting
 create new notes
-
-Features on the way:
+delete old notes
 Autosave functionality!
 Math equation rendering
+Improved UI
+Notes browser
+
+Features on the way:
 Function plotting
 tables
-Improved UI
 Data graphing
-Notes browser
 Create drawings in your notes
