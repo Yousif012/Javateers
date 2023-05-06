@@ -11,17 +11,17 @@ Project Site: https://yousif012.github.io/JavateersProjectSite/
 A notes app where you can keep track of your ideas. 
 
 Implemented features:
-text editing
-text formatting
-create new notes
-delete old notes
-Autosave functionality!
-Math equation rendering
-Improved UI
-Notes browser
+- text editing
+- text formatting
+- create new notes
+- delete old notes
+- Autosave functionality!
+- Math equation rendering
+- Improved UI
+- Notes browser
 
 Features on the way:
-Function plotting
-tables
-Data graphing
-Create drawings in your notes
+- Function plotting
+- tables
+- Data graphing
+- Create drawings in your notes
