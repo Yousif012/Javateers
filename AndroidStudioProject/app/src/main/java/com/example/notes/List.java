@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class List extends ArrayAdapter<String> {
+import java.io.File;
+
+public class List extends ArrayAdapter<File> {
 
     private final Activity context;
-    private final String[] title;
+    private final File[] title;
 
-    public List(Activity context, String[] title) {
+    public List(Activity context, File[] title) {
         super(context, R.layout.list, title);
         // TODO Auto-generated constructor stub
 
@@ -28,7 +30,7 @@ public class List extends ArrayAdapter<String> {
 
         TextView titleText = (TextView) rowView.findViewById(R.id.title);
 
-        titleText.setText(title[position]);
+        titleText.setText(title[position].getName());
 
         return rowView;
 
