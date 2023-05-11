@@ -32,15 +32,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import jp.wasabeef.richeditor.RichEditor;
 
 public class MainActivity extends AppCompatActivity {
 
 
     static ArrayList<String> notes = new ArrayList<>();
-    static ArrayAdapter arrayAdapter;
-    static File[] filelist;
-    static List<File> values;
+    static ArrayAdapter<String> arrayAdapter;
+    static String[] filelist;
+    static List<String> values;
 
 
     @Override
@@ -105,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
                                                 throw new RuntimeException(e);
                                             }
 
-                                            filelist = getApplicationContext().getFilesDir().listFiles();
+                                            filelist = getApplicationContext().getFilesDir().list();
 
                                             arrayAdapter.clear(); // update menu in app
-                                            for (File file : filelist) {
-                                                arrayAdapter.add(file);
+                                            for (String string : filelist) {
+                                                arrayAdapter.add(string);
 
                                             }
                                             arrayAdapter.notifyDataSetChanged();
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("No", null)
                     .show();
+
 
             return true;
         }
@@ -136,9 +138,11 @@ public class MainActivity extends AppCompatActivity {
 
         //Shows a list of different notes to select and edit
         // weird work around, have to do it this way otherwise the arrayadapter won't update
-        filelist = getApplicationContext().getFilesDir().listFiles();
-        values = new ArrayList<File>(Arrays.asList(filelist));
-        arrayAdapter = new ArrayAdapter<File>(this, android.R.layout.simple_list_item_1, values);
+        filelist = getApplicationContext().getFilesDir().list();
+        values = new ArrayList<String>(Arrays.asList(filelist));
+
+        arrayAdapter = new com.example.notes.List(this, filelist);
+
 
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(arrayAdapter);
@@ -172,11 +176,11 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //File[] notes = getFilesDir().listFiles();
                                 noteToDelete.delete(); // delete file from device
-                                filelist = getApplicationContext().getFilesDir().listFiles();
+                                filelist = getApplicationContext().getFilesDir().list();
 
                                 arrayAdapter.clear(); // update menu in app
-                                for (File file : filelist) {
-                                    arrayAdapter.add(file);
+                                for (String string : filelist) {
+                                    arrayAdapter.add(string);
                                 }
                                 arrayAdapter.notifyDataSetChanged();
                             }
@@ -185,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                         .show();
 
                 return true;
+
             }
         });
 

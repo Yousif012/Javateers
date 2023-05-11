@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,6 +27,7 @@ public class NoteEditorActivity extends AppCompatActivity {
 
     private RichEditorBackEvent mEditor;
     private MathJaxView math;
+
 
     //int noteId;
     File note;
@@ -75,6 +77,7 @@ public class NoteEditorActivity extends AppCompatActivity {
 
         /*
         if(note != -1){
+
             mEditor.setHtml(MainActivity.notes.get(noteId));
         }
         else {
