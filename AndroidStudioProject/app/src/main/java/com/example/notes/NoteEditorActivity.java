@@ -3,6 +3,8 @@ package com.example.notes;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,9 +21,12 @@ import java.util.Scanner;
 
 import jp.wasabeef.richeditor.RichEditor;
 
+import io.github.sidvenu.mathjaxview.MathJaxView;
+
 public class NoteEditorActivity extends AppCompatActivity {
 
-    private RichEditor mEditor;
+    private RichEditorBackEvent mEditor;
+    private MathJaxView math;
 
 
     //int noteId;
@@ -31,10 +36,14 @@ public class NoteEditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
-        mEditor = (RichEditor) findViewById(R.id.editor);
+        mEditor = (RichEditorBackEvent) findViewById(R.id.editor);
         mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
         mEditor.setEditorFontColor(Color.BLACK);
+
+        math = findViewById(R.id.formula);
+        math.setText(mEditor.getHtml());
+        math.setVisibility(View.GONE);
         //mEditor.setEditorBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundColor(Color.BLUE);
         //mEditor.setBackgroundResource(R.drawable.bg);
@@ -90,10 +99,29 @@ public class NoteEditorActivity extends AppCompatActivity {
                     writer.write(text);
                     writer.flush();
                     writer.close();
+                    math.setText(mEditor.getHtml()); // updates math preview
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        });
+
+       mEditor.setOnRichEditorImeBackListener(new RichEditorImeBackListener() {
+           @Override
+           public void onImeBack(RichEditorBackEvent ctrl, String text) {
+               mEditor.setVisibility(View.GONE);
+               math.setVisibility(View.VISIBLE);
+           }
+       });
+
+        math.setOnTouchListener(new MathJaxView.OnTouchListener() {
+            // hide math preview and make rich editor come back
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                math.setVisibility(View.GONE);
+                mEditor.setVisibility(View.VISIBLE);
+                return true;
             }
         });
 

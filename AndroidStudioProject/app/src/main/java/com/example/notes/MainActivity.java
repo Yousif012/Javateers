@@ -136,23 +136,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String title = "Placeholder";
-        File note = new File(getApplicationContext().getFilesDir(), title);
-
-        try {// create storage file
-            note.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try { // initialize file
-            FileWriter writer = new FileWriter(note);
-            writer.write("Input text here:");
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
         //Shows a list of different notes to select and edit
         // weird work around, have to do it this way otherwise the arrayadapter won't update
         filelist = getApplicationContext().getFilesDir().list();
@@ -170,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
                 //intent.putExtra("noteId", i);
+                File note = (File) listView.getItemAtPosition(i);
                 intent.putExtra("note", note);
                 startActivity(intent);
             }

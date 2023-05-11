@@ -193,9 +193,13 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <jp.wasabeef.richeditor.RichEditor
+    <com.example.notes.RichEditorBackEvent
         android:id="@+id/editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <io.github.sidvenu.mathjaxview.MathJaxView
+        android:id="@+id/formula"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
