@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     static ArrayList<String> notes = new ArrayList<>();
-    static ArrayAdapter<String> arrayAdapter;
-    static String[] filelist;
-    static List<String> values;
+    static ArrayAdapter<File> arrayAdapter;
+    static File[] filelist;
+    static List<File> values;
 
 
     @Override
@@ -106,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
                                                 throw new RuntimeException(e);
                                             }
 
-                                            filelist = getApplicationContext().getFilesDir().list();
+                                            filelist = getApplicationContext().getFilesDir().listFiles();
 
                                             arrayAdapter.clear(); // update menu in app
-                                            for (String string : filelist) {
-                                                arrayAdapter.add(string);
+                                            for (File file : filelist) {
+                                                arrayAdapter.add(file);
 
                                             }
                                             arrayAdapter.notifyDataSetChanged();
@@ -138,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Shows a list of different notes to select and edit
         // weird work around, have to do it this way otherwise the arrayadapter won't update
-        filelist = getApplicationContext().getFilesDir().list();
-        values = new ArrayList<String>(Arrays.asList(filelist));
+        filelist = getApplicationContext().getFilesDir().listFiles();
+        values = new ArrayList<File>(Arrays.asList(filelist));
 
         arrayAdapter = new com.example.notes.List(this, filelist);
 
@@ -176,11 +176,11 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //File[] notes = getFilesDir().listFiles();
                                 noteToDelete.delete(); // delete file from device
-                                filelist = getApplicationContext().getFilesDir().list();
+                                filelist = getApplicationContext().getFilesDir().listFiles();
 
                                 arrayAdapter.clear(); // update menu in app
-                                for (String string : filelist) {
-                                    arrayAdapter.add(string);
+                                for (File file : filelist) {
+                                    arrayAdapter.add(file);
                                 }
                                 arrayAdapter.notifyDataSetChanged();
                             }
