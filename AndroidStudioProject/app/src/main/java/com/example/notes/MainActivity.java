@@ -35,11 +35,13 @@ import java.util.List;
 
 import jp.wasabeef.richeditor.RichEditor;
 
+// The home page of the application
 public class MainActivity extends AppCompatActivity {
 
 
     static ArrayList<String> notes = new ArrayList<>();
     static ArrayAdapter<File> arrayAdapter;
+    // filelist: list of files where the notes are stored
     static File[] filelist;
     static List<File> values;
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    // Handle the options menu for creating new notes
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         return  false;
     }
 
+    // Initial application start
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,48 +196,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        //notes.add("Example note");
-
-        //arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, notes);
-
-        //listView.setAdapter(arrayAdapter);
-
-        //listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        //@Override
-        //public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //Intent intent = new Intent(getApplicationContext(), NoteEditorActivity.class);
-        //intent.putExtra("noteId", i);
-        //startActivity(intent);
-        //}
-        //});
     }
-    /*
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                int itemToDelete = i;
-
-                new AlertDialog.Builder(MainActivity.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Are you sure?")
-                        .setMessage("Do you want to delete this note?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                notes.remove(itemToDelete);
-                                arrayAdapter.notifyDataSetChanged();
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-
-                return true;
-            }
-        });
-
-     */
 }
-//}

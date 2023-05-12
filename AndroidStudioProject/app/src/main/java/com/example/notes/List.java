@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import java.io.File;
 
+// Custom List component to implement the formatting and layout
 public class List extends ArrayAdapter<File> {
 
     private final Activity context;
     private final File[] title;
 
+    // Takes all Notes in the form of files
     public List(Activity context, File[] title) {
         super(context, R.layout.list, title);
-        // TODO Auto-generated constructor stub
-
         this.context=context;
         this.title=title;
 
@@ -30,6 +30,7 @@ public class List extends ArrayAdapter<File> {
 
         TextView titleText = (TextView) rowView.findViewById(R.id.title);
 
+        // Takes a notes file name as the title of list item
         titleText.setText(title[position].getName());
 
         return rowView;

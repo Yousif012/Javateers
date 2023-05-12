@@ -23,15 +23,14 @@ import jp.wasabeef.richeditor.RichEditor;
 
 import io.github.sidvenu.mathjaxview.MathJaxView;
 
+// code for note editor
 public class NoteEditorActivity extends AppCompatActivity {
 
     private RichEditorBackEvent mEditor;
     private MathJaxView math;
-
-
-    //int noteId;
     File note;
 
+    // handle creating a new note
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +43,6 @@ public class NoteEditorActivity extends AppCompatActivity {
         math = findViewById(R.id.formula);
         math.setText(mEditor.getHtml());
         math.setVisibility(View.GONE);
-        //mEditor.setEditorBackgroundColor(Color.BLUE);
-        //mEditor.setBackgroundColor(Color.BLUE);
-        //mEditor.setBackgroundResource(R.drawable.bg);
-        //mEditor.setPadding(10, 10, 10, 10);
-        //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        //mEditor.setPlaceholder("Insert text here...");
-        //mEditor.setInputEnabled(false);
 
 
 
@@ -74,25 +66,9 @@ public class NoteEditorActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-
-        /*
-        if(note != -1){
-
-            mEditor.setHtml(MainActivity.notes.get(noteId));
-        }
-        else {
-
-            MainActivity.notes.add("");
-            noteId = MainActivity.notes.size() - 1;
-            MainActivity.arrayAdapter.notifyDataSetChanged();
-        }
-        */
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) { // autosave feature
-
-                //MainActivity.notes.set(noteId, text);
-                //MainActivity.arrayAdapter.notifyDataSetChanged();
                 try {
                     FileWriter writer = new FileWriter(note);
 
@@ -107,13 +83,13 @@ public class NoteEditorActivity extends AppCompatActivity {
             }
         });
 
-       mEditor.setOnRichEditorImeBackListener(new RichEditorImeBackListener() {
-           @Override
-           public void onImeBack(RichEditorBackEvent ctrl, String text) {
-               mEditor.setVisibility(View.GONE);
-               math.setVisibility(View.VISIBLE);
-           }
-       });
+        mEditor.setOnRichEditorImeBackListener(new RichEditorImeBackListener() {
+            @Override
+            public void onImeBack(RichEditorBackEvent ctrl, String text) {
+                mEditor.setVisibility(View.GONE);
+                math.setVisibility(View.VISIBLE);
+            }
+        });
 
         math.setOnTouchListener(new MathJaxView.OnTouchListener() {
             // hide math preview and make rich editor come back
@@ -124,6 +100,8 @@ public class NoteEditorActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        // Handle formats and styles
 
         findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override
