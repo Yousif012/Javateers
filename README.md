@@ -22,6 +22,9 @@ Inside "AndroidStudioProject/app/src/main/res/" you will find the resources of t
 - After the previous step, you will launch the application in Android Studio
 - To run it, you will need to set up an emulator. Follow these steps https://developer.android.com/studio/run/emulator
 
+
+# Description
+
 A notes app where you can keep track of your ideas. 
 
 Implemented features:
