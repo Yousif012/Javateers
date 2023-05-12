@@ -8,7 +8,7 @@ Project Site: https://yousif012.github.io/JavateersProjectSite/
 ### chiagozie Emelife
 ### Mauricio Munoz
 
-## How to Use:
+## How to Navigate:
 
 Inside "AndroidStudioProject/app/src/main/" you will find a folder called "java/com/example/notes". This is where you will find the raw JAVA files.
 
